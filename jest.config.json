@@ -1,0 +1,16 @@
+{
+  "preset": "react-native",
+  "setupFilesAfterEnv": [
+    "<rootDir>/src/setupTests.js"
+  ],
+  "transformIgnorePatterns": [
+    "/node_modules/(?!native-base)/"
+  ],
+  "coverageReporters": [
+    "text",
+    "html"
+  ],
+  "setupFiles": [
+    "./node_modules/react-native-gesture-handler/jestSetup.js"
+  ]
+}
