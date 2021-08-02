@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Text} from 'react-native';
-import {StyledButton} from './styles';
+import { Text } from 'react-native';
+import { StyledButton } from './styles';
 
-const Button = ({title, onPress, disabled}) => {
+const Button = ({ title, onPress, disabled }) => {
   return (
     <StyledButton
       onPress={() => {
