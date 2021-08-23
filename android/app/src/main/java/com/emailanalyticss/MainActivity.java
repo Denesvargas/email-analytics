@@ -1,4 +1,4 @@
-package com.emailanalytics;
+package com.emailanalyticss;
 
 import com.facebook.react.ReactActivity;
 

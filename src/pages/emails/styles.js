@@ -65,7 +65,7 @@ export const Wrapper = styled.View`
 `;
 
 export const SelectWrapper = styled.View`
-  width: 48%;
+  width: 60%;
 `;
 
 export const BarChart = styled(BarChartTemplate).attrs((props) => ({

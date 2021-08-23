@@ -4,8 +4,40 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import { SafeAreaView } from 'react-native';
-import { Login } from 'pages';
+import { Login, Home, Emails } from 'pages';
+import { Icon } from 'react-native-elements';
+
+const Tab = createBottomTabNavigator();
+
+const Logged = () => {
+  return (
+    <>
+      <Tab.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            tabBarIcon: () => <Icon name="email" />,
+          }}
+        />
+        <Tab.Screen
+          name="Emails"
+          component={Emails}
+          options={{
+            tabBarIcon: () => <Icon name="repeat" />,
+          }}
+        />
+      </Tab.Navigator>
+    </>
+  );
+};
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -24,6 +56,13 @@ const App = () => {
             <Stack.Screen
               name="Login"
               component={Login}
+              options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="Logged"
+              component={Logged}
               options={{
                 ...TransitionPresets.SlideFromRightIOS,
               }}
