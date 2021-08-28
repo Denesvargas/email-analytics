@@ -57,7 +57,7 @@ const Emails = () => {
           />
         </SelectWrapper>
       </Wrapper>
-      <View></View>
+      <View />
     </Screen>
   );
 };

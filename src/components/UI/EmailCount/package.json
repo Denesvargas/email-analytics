@@ -1,0 +1,4 @@
+{
+  "name": "email-count",
+  "main": "./EmailCount.js"
+}

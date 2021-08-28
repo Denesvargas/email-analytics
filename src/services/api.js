@@ -2,7 +2,7 @@ import axios from 'axios';
 import Config from 'react-native-config';
 
 const instance = axios.create({
-  baseURL: Config.API_HOST,
+  baseURL: 'https://afk67xevcj.execute-api.us-east-1.amazonaws.com',
 });
 
-export default instance;
+export { instance };

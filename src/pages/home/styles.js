@@ -17,6 +17,7 @@ const chartConfig = {
   fillShadowGradientOpacity: 0.7,
   color: () => colors.primary,
   barPercentage: 0.5,
+  decimalPlaces: 0,
   propsForBackgroundLines: {
     strokeWidth: 1,
     x: width * 0.15,

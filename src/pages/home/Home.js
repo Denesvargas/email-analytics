@@ -12,6 +12,8 @@ import {
 } from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { instance } from '../../services/api';
 
 const Home = () => {
   const navigation = useNavigation();
@@ -55,8 +57,15 @@ const Home = () => {
     [navigation],
   );
 
-  const onLogout = useCallback(() => {
-    navigate('Login');
+  const onLogout = useCallback(async () => {
+    try {
+      await GoogleSignin.signOut();
+      await AsyncStorage.setItem('@token', '');
+      instance.defaults.headers.Authorization = null;
+      navigate('Login');
+    } catch (error) {
+      console.error(error);
+    }
   }, [navigate]);
 
   const setUsername = useCallback(async () => {
@@ -67,9 +76,29 @@ const Home = () => {
     }
   }, []);
 
+  const getEmailsData = useCallback(async () => {
+    try {
+      const user = await AsyncStorage.getItem('@user');
+      const { email } = JSON.parse(user);
+      const config = {
+        params: {
+          email,
+        },
+      };
+      const { data } = await instance.get('/gmail_analytics', config);
+      console.log('emails data ', data);
+    } catch (error) {
+      console.error('error emails ', JSON.stringify(error));
+    }
+  }, []);
+
   useEffect(() => {
     setUsername();
   }, [setUsername]);
+
+  useEffect(() => {
+    getEmailsData();
+  }, [getEmailsData]);
 
   return (
     <Screen>

@@ -7,6 +7,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { instance } from '../../services/api';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -18,6 +19,7 @@ const Login = () => {
         '301692265080-hcqo4kmc095moe5b3hcoh5pr3333f1rl.apps.googleusercontent.com',
       androidClientId:
         '301692265080-fm2b3sjikodchpng0tf8otplkctnu8g2.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+      offlineAccess: true,
     });
   }, []);
 
@@ -25,8 +27,15 @@ const Login = () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      await AsyncStorage.setItem('@token', userInfo.idToken);
+      const tokens = await GoogleSignin.getTokens({
+        idToken: userInfo.idToken,
+        accessToken: userInfo.serverAuthCode,
+      });
+      await AsyncStorage.setItem('@token', tokens.accessToken);
       await AsyncStorage.setItem('@user', JSON.stringify(userInfo.user));
+      instance.defaults.headers.Authorization = `Bearer ${tokens.accessToken}`;
+      // console.log('response', userInfo);
+      // console.log('tokens', tokens);
       navigate('Logged');
     } catch (error) {
       console.log('error ', JSON.stringify(error));
