@@ -61,7 +61,6 @@ const Emails = () => {
       mapSendersSentObject.length > 0
     ) {
       setSenders([mapSendersSentObject, mapSendersMonthObject]);
-      console.log('enviados ', mapSendersSentObject);
     }
   }, []);
 
