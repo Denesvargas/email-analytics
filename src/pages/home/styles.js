@@ -6,6 +6,7 @@ import { BarChart as BarChartTemplate } from 'react-native-chart-kit';
 import {
   IconButton as IconButtonTemplate,
   Select as SelectTemplate,
+  EmailCount as EmailCountTemplate,
 } from '../../components';
 
 const chartConfig = {
@@ -38,9 +39,13 @@ const chartConfig = {
   },
 };
 
-export const Screen = styled.View`
+export const Screen = styled.ScrollView`
   height: 100%;
   background-color: ${colors.primary};
+`;
+
+export const Container = styled.View`
+  padding-bottom: 35px;
 `;
 
 export const IconButton = styled(IconButtonTemplate)``;
@@ -68,6 +73,8 @@ export const Wrapper = styled.View`
 export const SelectWrapper = styled.View`
   width: 48%;
 `;
+
+export const EmailCount = styled(EmailCountTemplate)``;
 
 export const BarChart = styled(BarChartTemplate).attrs((props) => ({
   ...props,

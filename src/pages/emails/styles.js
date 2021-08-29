@@ -1,45 +1,18 @@
 import styled from 'styled-components';
 import { colors } from '../../common/defaults';
-import { Dimensions } from 'react-native';
-const { height, width } = Dimensions.get('window');
-import { BarChart as BarChartTemplate } from 'react-native-chart-kit';
 import {
   IconButton as IconButtonTemplate,
   Select as SelectTemplate,
+  EmailCount as EmailCountTemplate,
 } from '../../components';
 
-const chartConfig = {
-  backgroundGradientFrom: colors.white,
-  backgroundGradientFromOpacity: 1,
-  backgroundGradientTo: colors.white,
-  backgroundGradientToOpacity: 1,
-  fillShadowGradient: colors.secondary,
-  fillShadowGradientOpacity: 0.7,
-  color: () => colors.primary,
-  barPercentage: 0.5,
-  propsForBackgroundLines: {
-    strokeWidth: 1,
-    x: width * 0.15,
-    fillOpacity: 1,
-    stroke: '#0006',
-  },
-  propsForVerticalLabels: {
-    stroke: 'none',
-    strokeWidth: 0.9,
-    scale: 1.1,
-    fill: colors.secondary,
-  },
-  propsForHorizontalLabels: {
-    stroke: 'none',
-    strokeWidth: 0.9,
-    scale: 1.2,
-    fill: colors.black,
-  },
-};
-
-export const Screen = styled.View`
+export const Screen = styled.ScrollView`
   height: 100%;
   background-color: ${colors.primary};
+`;
+
+export const Container = styled.View`
+  padding-bottom: 35px;
 `;
 
 export const IconButton = styled(IconButtonTemplate)``;
@@ -68,18 +41,4 @@ export const SelectWrapper = styled.View`
   width: 60%;
 `;
 
-export const BarChart = styled(BarChartTemplate).attrs((props) => ({
-  ...props,
-  height: height * 0.4,
-  width: width * 0.85,
-  chartConfig: chartConfig,
-  verticalLabelRotation: 0,
-  showValuesOnTopOfBars: true,
-  fromZero: true,
-}))`
-  align-self: center;
-  margin-top: 16px;
-  border: ${`${width * 0.03}px`} solid white;
-  border-bottom-width: ${`${width * 0.01}px`};
-  border-radius: 25px;
-`;
+export const EmailCount = styled(EmailCountTemplate)``;

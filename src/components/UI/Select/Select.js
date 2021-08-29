@@ -15,7 +15,7 @@ const Select = ({
   mode,
   requiredError,
 }) => {
-  const [value, setValue] = useState('0');
+  const [value, setValue] = useState(1);
   const [optionsState, setOptionsState] = useState([]);
 
   const onValueChange = (newValue) => {
@@ -26,10 +26,6 @@ const Select = ({
   const updateOptions = () => {
     let opt = [];
     opt = opt.concat(options);
-    opt.unshift({
-      value: '0',
-      label: 'Selecione',
-    });
     setOptionsState(opt);
   };
 

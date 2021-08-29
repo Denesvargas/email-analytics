@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
-import { StatusBar, View } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { StatusBar } from 'react-native';
 import {
   Screen,
-  BarChart,
+  Container,
+  EmailCount,
   IconButton,
   TitleView,
   TextTitle,
@@ -11,28 +12,29 @@ import {
   SelectWrapper,
 } from './styles';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Emails = () => {
   const navigation = useNavigation();
   const [params, setParams] = useState({
-    week: '0',
+    folder: 1,
   });
-
+  const [senders, setSenders] = useState([[], []]);
   const selectOptions = [
-    { value: '1', label: 'Enviados' },
-    { value: '2', label: 'Recebidos' },
+    { value: 0, label: 'Enviados' },
+    { value: 1, label: 'Recebidos' },
   ];
 
   const onSelectionChange = (newValue) => {
     setParams((prevForm) => ({
       ...prevForm,
-      week: newValue,
+      folder: newValue,
     }));
   };
 
   const navigate = useCallback(
-    async (router, params = {}) => {
-      navigation.navigate(router, params);
+    async (router) => {
+      navigation.navigate(router, {});
     },
     [navigation],
   );
@@ -40,6 +42,32 @@ const Emails = () => {
   const onLogout = useCallback(() => {
     navigate('Login');
   }, [navigate]);
+
+  const getEmailsData = useCallback(async () => {
+    loadSavedData();
+  }, [loadSavedData]);
+
+  const loadSavedData = useCallback(async () => {
+    const mapSendersMonthObject = JSON.parse(
+      await AsyncStorage.getItem('@mapSendersMonthObject'),
+    );
+    const mapSendersSentObject = JSON.parse(
+      await AsyncStorage.getItem('@mapSendersSentObject'),
+    );
+    if (
+      !!mapSendersMonthObject &&
+      mapSendersMonthObject.length > 0 &&
+      !!mapSendersSentObject &&
+      mapSendersSentObject.length > 0
+    ) {
+      setSenders([mapSendersSentObject, mapSendersMonthObject]);
+      console.log('enviados ', mapSendersSentObject);
+    }
+  }, []);
+
+  useEffect(() => {
+    getEmailsData();
+  }, [getEmailsData]);
 
   return (
     <Screen>
@@ -57,7 +85,18 @@ const Emails = () => {
           />
         </SelectWrapper>
       </Wrapper>
-      <View />
+      <Container>
+        {senders[params.folder].map((item, key) => {
+          return (
+            <EmailCount
+              key={key}
+              email={item.email}
+              count={item.count}
+              even={key % 2 === 0}
+            />
+          );
+        })}
+      </Container>
     </Screen>
   );
 };
