@@ -8,6 +8,10 @@ export const momentToDate = (value) => {
   return moment(value).toDate();
 };
 
+export const dayOfWeek = (value) => {
+  return moment(value).day();
+};
+
 export const formatDateTo = (value, formatFrom, toFormat = 'HH[h]mm') => {
   return moment(value, formatFrom).format(toFormat);
 };

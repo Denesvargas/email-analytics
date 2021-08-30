@@ -16,7 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { instance } from '../../services/api';
-import { daysBetween, momentToDate } from '../../common/date';
+import { daysBetween, momentToDate, dayOfWeek } from '../../common/date';
 
 const Home = () => {
   const navigation = useNavigation();
@@ -82,6 +82,13 @@ const Home = () => {
     }));
   };
 
+  const onLabelsChange = (values) => {
+    setData((prevValues) => ({
+      ...prevValues,
+      labels: values,
+    }));
+  };
+
   const navigate = useCallback(
     async (router) => {
       navigation.navigate(router, {});
@@ -136,7 +143,7 @@ const Home = () => {
     const mapSendersSentObject = [];
     values.forEach((item, index) => {
       const daysEmail = daysBetween(momentToDate(item[0]), new Date());
-      if (daysEmail <= 28) {
+      if (daysEmail < 28) {
         const arrayBasedDays = Math.floor(daysEmail / 7);
         const isSpam = item[3].indexOf('SPAM') > -1;
         const arrayDataEmail = isSpam ? 4 + arrayBasedDays : arrayBasedDays;
@@ -144,6 +151,9 @@ const Home = () => {
           countEmails[arrayDataEmail][daysEmail % 7] =
             countEmails[arrayDataEmail][daysEmail % 7] + 1;
           let nameSender = item[2].split('<')[1];
+          if (!nameSender) {
+            nameSender = item[2];
+          }
           nameSender = nameSender.substring(0, nameSender.length - 1);
           if (mapSenders[arrayDataEmail].has(nameSender)) {
             const countSend = mapSenders[arrayDataEmail].get(nameSender);
@@ -159,6 +169,9 @@ const Home = () => {
           }
         } else {
           let nameSender = item[1].split('<')[1];
+          if (!nameSender) {
+            nameSender = item[1];
+          }
           nameSender = nameSender.substring(0, nameSender.length - 1);
           if (mapSendersSent.has(nameSender)) {
             const countSend = mapSendersSent.get(nameSender);
@@ -189,7 +202,6 @@ const Home = () => {
       return a.count < b.count;
     });
     for (let key of mapSendersSent.keys()) {
-      console.log('key sent', key);
       mapSendersSentObject.push({
         email: key,
         count: mapSendersSent.get(key),
@@ -197,6 +209,9 @@ const Home = () => {
     }
     mapSendersSentObject.sort((a, b) => {
       return a.count < b.count;
+    });
+    countEmails.forEach((item) => {
+      item.reverse();
     });
     // console.log('count Emails ', mapSendersSentObject);
     setParsedData(countEmails);
@@ -251,6 +266,16 @@ const Home = () => {
     }
   }, []);
 
+  const loadWeek = useCallback(async () => {
+    const number = dayOfWeek(new Date());
+    const arrayDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+    let daysLabels = [];
+    for (let i = 0; i < 7; i++) {
+      daysLabels.push(arrayDays[(number + i + 1) % 7]);
+    }
+    onLabelsChange(daysLabels);
+  }, []);
+
   useEffect(() => {
     onDataChange(parsedData[params.week + 4 * (params.type - 1) - 1]);
     setActiveArray(params.week + 4 * (params.type - 1) - 1);
@@ -259,6 +284,10 @@ const Home = () => {
   useEffect(() => {
     setUsername();
   }, [setUsername]);
+
+  useEffect(() => {
+    loadWeek();
+  }, [loadWeek]);
 
   useEffect(() => {
     getEmailsData();
